@@ -3,15 +3,15 @@
 // Chassis constructor
 ez::Drive chassis(
     // Drive Motors
-    {1, 2, 3},     // Left Chassis Ports (negative will reverse it)
-    {-4, -5, -6},  // Right Chassis Ports (negative will reverse it)
+    {-16, -17, 14},     // Left Chassis Ports (negative will reverse it)
+    {12, 20, -18},  // Right Chassis Ports (negative will reverse it)
 
-    7,      // IMU Port
+    11,      // IMU Port
     3.25,  // Wheel Diameter
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 // Vertical Tracking Wheel
-ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(-3, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -258,6 +258,12 @@ void opcontrol() {
     else if (master.get_digital(DIGITAL_L2)) // Normal Intake Stop
     {
       setIntake(0);
+    }
+    else if (master.get_digital(DIGITAL_R1)) // Block Hold Intake
+    {
+      upperIntake.move(-50);
+      lowerIntake.move(127);
+      intakeState = -1;
     }
     else if (master.get_digital(DIGITAL_R2)) // Block Hold Intake Stop
     {
